@@ -1,40 +1,39 @@
 import {
   StyleSheet,
-  Text,
   View,
-
-  TextInput,
-  
 } from "react-native";
-import RegistrationScreen from './Screens/RegistrationScreen'
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import RegistrationScreen from './Screens/RegistrationScreen';
+import "react-native-gesture-handler";
 
+import LoginScreen from "./Screens/LoginScreen";
+import PostsScreen from "./Screens/PostsScreen";
+
+const Stack = createStackNavigator();
 
 export default function App() {
-   
-  return (
-    <View style={styles.appContainer}>
      
-      <RegistrationScreen/>
-    </View>
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Registration">
+        <Stack.Screen
+          name="Registration"
+          component={RegistrationScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="LoginScreen"
+          component={LoginScreen}
+          options={{headerShown: false }}
+        />
+        <Stack.Screen
+          name="PostsScreen"
+          component={PostsScreen}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  appContainer: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 45,
-    paddingBottom: 45,
-    paddingLeft: 16,
-    paddingRight: 16,
-  },
-  textTitle: {
-    margin: 10,
-    borderWidth: 2,
-    borderColor: "blue",
-    padding: 10,
-  },
- 
-});
