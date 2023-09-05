@@ -88,6 +88,11 @@ const RegistrationScreen = ({ navigation }) => {
     if (isFormValid) {
       console.log("Form Data:", formData);
     }
+     setFormData({
+       login: "",
+       email: "",
+       password: "",
+     });
   };
 
 

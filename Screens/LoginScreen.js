@@ -82,6 +82,10 @@ const LoginScreen = ({ navigation }) => {
     if (isFormValid) {
       console.log("Form Data:", formData);
     }
+     setFormData({
+       email: "",
+       password: "",
+     });
   };
     
 
