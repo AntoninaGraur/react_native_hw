@@ -8,7 +8,8 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  TouchableOpacity,
+  TouchableHighlight,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { useFonts } from "expo-font";
 
@@ -44,44 +45,109 @@ const LoginScreen = ({ navigation }) => {
       keyboardDidHideListener.remove();
     };
   }, []);
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [formErrors, setFormErrors] = useState({});
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.email) {
+      errors.email = "Email is required";
+    } else if (!isValidEmail(formData.email)) {
+      errors.email = "Invalid email address";
+    }
+
+    if (!formData.password) {
+      errors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      errors.password = "Password must be at least 6 characters long";
+    }
+
+    setFormErrors(errors);
+
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleRegistration = () => {
+    const isFormValid = validateForm();
+
+    if (isFormValid) {
+      console.log("Form Data:", formData);
+    }
+  };
+    
+
   return (
-    <View style={styles.imageContainer}>
-      <Image
-        source={require("../assets/photo_bcg.png")}
-        style={styles.backgroundImage}
-      />
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : null}
-      >
-        <View style={[styles.innerContainer, { marginTop }]}>
-          <Text style={styles.title}>Login </Text>
-          <TextInput style={styles.input} placeholder="Email adress" />
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.passwordInput}
-              placeholder="Password"
-              secureTextEntry={!isPasswordVisible}
-            />
-            <Text
-              style={styles.togglePasswordButton}
-              onPress={togglePasswordVisibility}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("../assets/photo_bcg.png")}
+          style={styles.backgroundImage}
+        />
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : null}
+        >
+          <View style={[styles.innerContainer, { marginTop }]}>
+            <Text style={styles.title}>Login </Text>
+            <View style={styles.emailContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Email adress"
+                onChangeText={(text) =>
+                  setFormData({ ...formData, email: text })
+                }
+              />
+              {formErrors.email && (
+                <Text style={styles.errorEmailText}>{formErrors.email}</Text>
+              )}
+            </View>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Password"
+                secureTextEntry={!isPasswordVisible}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, password: text })
+                }
+              />
+              <Text
+                style={styles.togglePasswordButton}
+                onPress={togglePasswordVisibility}
+              >
+                {isPasswordVisible ? "Hide" : "Show"}
+              </Text>
+              {formErrors.password && (
+                <Text style={styles.errorPasswordText}>
+                  {formErrors.password}
+                </Text>
+              )}
+            </View>
+            <TouchableHighlight
+              style={styles.buttonContainer}
+              onPress={handleRegistration}
+              underlayColor="transparent"
             >
-              {isPasswordVisible ? "Hide" : "Show"}
+              <Text style={styles.buttonTitle}>Login</Text>
+            </TouchableHighlight>
+            <Text
+              style={styles.navigationText}
+              onPress={() => navigation.navigate("Registration")}
+            >
+              Do not have account? Register
             </Text>
           </View>
-          <TouchableOpacity style={styles.buttonContainer}>
-            <Text style={styles.buttonTitle}>Login</Text>
-          </TouchableOpacity>
-          <Text
-            style={styles.navigationText}
-            onPress={() => navigation.navigate("Registration")}
-          >
-            Do not have account? Register
-          </Text>
-        </View>
-      </KeyboardAvoidingView>
-    </View>
+        </KeyboardAvoidingView>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -176,5 +242,22 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     color: "#1B4371",
     marginBottom: 45,
+  },
+  emailContainer: {
+    position: "relative",
+  },
+  errorEmailText: {
+    position: "absolute",
+    top: 50,
+    fontSize: 12,
+    fontFamily: "Roboto",
+    color: "red",
+  },
+  errorPasswordText: {
+    position: "absolute",
+    top: 50,
+    fontSize: 12,
+    fontFamily: "Roboto",
+    color: "red",
   },
 });

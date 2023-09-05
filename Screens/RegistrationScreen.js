@@ -5,13 +5,12 @@ import {
   TextInput,
   StyleSheet,
   Image,
-    Keyboard,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
-
 import { useFonts } from "expo-font";
-
 import RegisterButton from "./components/Buttons";
 
 const RegistrationScreen = ({ navigation }) => {
@@ -19,74 +18,150 @@ const RegistrationScreen = ({ navigation }) => {
     "Roboto-Bold": require("../assets/fonts/Roboto/Roboto-Bold.ttf"),
   });
 
-
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-const [marginTop, setMarginTop] = useState(235);
+  const [marginTop, setMarginTop] = useState(235);
 
-useEffect(() => {
-  const keyboardDidShowListener = Keyboard.addListener(
-    "keyboardDidShow",
-    () => {
-      setMarginTop(45); 
-    }
-  );
-  const keyboardDidHideListener = Keyboard.addListener(
-    "keyboardDidHide",
-    () => {
-      setMarginTop(235);
-    }
-  );
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setMarginTop(45);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setMarginTop(235);
+      }
+    );
 
-  return () => {
-    keyboardDidShowListener.remove();
-    keyboardDidHideListener.remove();
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  const [formData, setFormData] = useState({
+    login: "",
+    email: "",
+    password: "",
+  });
+
+  const [formErrors, setFormErrors] = useState({});
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
-}, []);
+  const validateForm = () => {
+    const errors = {};
 
-  
+    if (!formData.login) {
+      errors.login = "Login is required";
+    }
+
+    if (!formData.email) {
+      errors.email = "Email is required";
+    } else if (!isValidEmail(formData.email)) {
+      errors.email = "Invalid email address";
+    }
+
+    if (!formData.password) {
+      errors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      errors.password = "Password must be at least 6 characters long";
+    }
+
+    setFormErrors(errors);
+
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleRegistration = () => {
+    const isFormValid = validateForm();
+
+    if (isFormValid) {
+      console.log("Form Data:", formData);
+    }
+  };
+
+
   return (
-    <View style={styles.imageContainer}>
-      <Image
-        source={require("../assets/photo_bcg.png")}
-        style={styles.backgroundImage}
-      />
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : null}
-      >
-        <View style={[styles.innerContainer, { marginTop }]}>
-          <Image style={styles.avatarImage} />
-          <Text style={styles.title}>Registration</Text>
-          <TextInput style={styles.input} placeholder="Login" />
-          <TextInput style={styles.input} placeholder="Email address" />
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.passwordInput}
-              placeholder="Password"
-              secureTextEntry={!isPasswordVisible}
-            />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("../assets/photo_bcg.png")}
+          style={styles.backgroundImage}
+        />
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : null}
+        >
+          <View style={[styles.innerContainer, { marginTop }]}>
+            <Image style={styles.avatarImage} />
+            <Text style={styles.title}>Registration</Text>
+            <View style={styles.loginContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Login"
+                onChangeText={(text) =>
+                  setFormData({ ...formData, login: text })
+                }
+              />
+              {formErrors.login && (
+                <Text style={styles.errorLoginText}>{formErrors.login}</Text>
+              )}
+            </View>
+            <View style={styles.emailContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Email address"
+                onChangeText={(text) =>
+                  setFormData({ ...formData, email: text })
+                }
+              />
+              {formErrors.email && (
+                <Text style={styles.errorEmailText}>{formErrors.email}</Text>
+              )}
+            </View>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Password"
+                secureTextEntry={!isPasswordVisible}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, password: text })
+                }
+              />
+
+              <Text
+                style={styles.togglePasswordButton}
+                onPress={togglePasswordVisibility}
+              >
+                {isPasswordVisible ? "Hide" : "Show"}
+              </Text>
+              {formErrors.password && (
+                <Text style={styles.errorPasswordText}>
+                  {formErrors.password}
+                </Text>
+              )}
+            </View>
             <Text
-              style={styles.togglePasswordButton}
-              onPress={togglePasswordVisibility}
+              style={styles.navigationText}
+              onPress={() => navigation.navigate("LoginScreen")}
             >
-              {isPasswordVisible ? "Hide" : "Show"}
+              Already have account? Login
             </Text>
+            <RegisterButton onPress={handleRegistration} />
           </View>
-          <Text
-            style={styles.navigationText}
-            onPress={() => navigation.navigate("LoginScreen")}
-          >
-            Already have account? Login
-          </Text>
-          <RegisterButton  />
-        </View>
-      </KeyboardAvoidingView>
-    </View>
+        </KeyboardAvoidingView>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -118,6 +193,13 @@ const styles = StyleSheet.create({
     marginBottom: 33,
     marginTop: 32,
   },
+  loginContainer: {
+    position: "relative",
+  },
+  emailContainer: {
+    position: "relative",
+  },
+
   input: {
     width: 343,
     height: 50,
@@ -172,6 +254,28 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     color: "#1B4371",
     marginBottom: 45,
+  },
+  errorLoginText: {
+    position: "absolute",
+
+    top: 50,
+    fontSize: 12,
+    fontFamily: "Roboto",
+    color: "red",
+  },
+  errorEmailText: {
+    position: "absolute",
+    top: 50,
+    fontSize: 12,
+    fontFamily: "Roboto",
+    color: "red",
+  },
+  errorPasswordText: {
+    position: "absolute",
+    top: 50,
+    fontSize: 12,
+    fontFamily: "Roboto",
+    color: "red",
   },
 });
 

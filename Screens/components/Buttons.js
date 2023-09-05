@@ -1,17 +1,16 @@
 import React from "react";
-import { Text,  TouchableOpacity, StyleSheet } from "react-native";
+import { Text, TouchableHighlight, StyleSheet } from "react-native";
 
-const RegisterButton = () => {
-  
-
+const RegisterButton = ({ onPress }) => {
   return (
-    <TouchableOpacity
+    <TouchableHighlight
       style={btnStyle.container}
+      onPress={onPress}
+      underlayColor="transparent"
     >
       <Text style={btnStyle.title}>Register</Text>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
- 
 };
 export default RegisterButton;
 
