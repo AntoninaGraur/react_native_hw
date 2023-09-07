@@ -1,11 +1,13 @@
 import {
   StyleSheet,
   View,
+  Button
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import RegistrationScreen from './Screens/RegistrationScreen';
 import "react-native-gesture-handler";
+
 
 import LoginScreen from "./Screens/LoginScreen";
 import PostsScreen from "./Screens/PostsScreen";
@@ -17,7 +19,7 @@ export default function App() {
      
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Registration">
         <Stack.Screen
           name="Registration"
           component={RegistrationScreen}
@@ -31,7 +33,7 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{ title: "Start screen" }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PostsScreen"

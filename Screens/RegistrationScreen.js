@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { useFonts } from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import RegisterButton from "./components/Buttons";
 
 const RegistrationScreen = ({ navigation }) => {
@@ -82,18 +83,32 @@ const RegistrationScreen = ({ navigation }) => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleRegistration = () => {
+  const handleRegistration = async () => {
     const isFormValid = validateForm();
 
     if (isFormValid) {
-      console.log("Form Data:", formData);
+   
+      try {
+        await AsyncStorage.setItem("userData", JSON.stringify(formData));
+        console.log("User data saved to AsyncStorage:", formData);
+      } catch (error) {
+        console.error("Error saving user data to AsyncStorage:", error);
+      }
+
+    
+      setFormData({
+        login: "",
+        email: "",
+        password: "",
+      });
+
+      
+      navigation.navigate("Home", {
+        email: formData.email,
+      });
     }
-     setFormData({
-       login: "",
-       email: "",
-       password: "",
-     });
   };
+
 
 
   return (

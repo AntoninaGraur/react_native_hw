@@ -11,6 +11,7 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 
 const LoginScreen = ({ navigation }) => {
@@ -76,17 +77,46 @@ const LoginScreen = ({ navigation }) => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleRegistration = () => {
+    useEffect(() => {
+      const fetchUserDataFromStorage = async () => {
+        try {
+          const userData = await AsyncStorage.getItem("userData");
+          if (userData) {
+            const parsedUserData = JSON.parse(userData);
+            setFormData({
+              email: parsedUserData.email,
+              password: parsedUserData.password,
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching user data from AsyncStorage:", error);
+        }
+      };
+
+      fetchUserDataFromStorage();
+    }, []);
+
+  const handleRegistration = async () => {
     const isFormValid = validateForm();
 
     if (isFormValid) {
-      console.log("Form Data:", formData);
+     
+      try {
+        await AsyncStorage.setItem("userData", JSON.stringify(formData));
+        console.log("User data updated in AsyncStorage:", formData);
+      } catch (error) {
+        console.error("Error updating user data in AsyncStorage:", error);
+      }
+      setFormData({
+        email: "",
+        password: "",
+      }); 
+      navigation.navigate("Home", {
+        email: formData.email,
+      });
     }
-     setFormData({
-       email: "",
-       password: "",
-     });
   };
+
     
 
   return (
