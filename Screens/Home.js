@@ -7,7 +7,7 @@ const Home = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <PostsScreen email={email} navigation={navigation}/>
+      {/* <PostsScreen email={email} navigation={navigation}/> */}
     </View>
   );
 };

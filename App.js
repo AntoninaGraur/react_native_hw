@@ -33,7 +33,24 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{ headerShown: false }}
+          options={{
+            title: "Home screen",
+            headerStyle: {
+              backgroundColor: "#f4511e",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+              fontSize: 20,
+            },
+            headerRight: () => (
+              <Button
+                onPress={() => alert("This is a button!")}
+                title="Press me"
+                color="#fff"
+              />
+            ),
+          }}
         />
         <Stack.Screen
           name="PostsScreen"

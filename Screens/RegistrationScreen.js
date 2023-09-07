@@ -9,9 +9,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
+  TouchableHighlight,
 } from "react-native";
 import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import SvgRegistAvatar from './components/registAvatarSvg';
 import RegisterButton from "./components/Buttons";
 
 const RegistrationScreen = ({ navigation }) => {
@@ -123,7 +126,9 @@ const RegistrationScreen = ({ navigation }) => {
           behavior={Platform.OS === "ios" ? "padding" : null}
         >
           <View style={[styles.innerContainer, { marginTop }]}>
-            <Image style={styles.avatarImage} />
+            <TouchableHighlight style={styles.avatarImage}>
+              <SvgRegistAvatar />
+            </TouchableHighlight>
             <Text style={styles.title}>Registration</Text>
             <View style={styles.loginContainer}>
               <TextInput
@@ -263,11 +268,10 @@ const styles = StyleSheet.create({
   avatarImage: {
     position: "absolute",
     zIndex: 10,
-    width: 132,
-    height: 120,
     backgroundColor: "#F6F6F6",
     borderRadius: 16,
     top: -70,
+   
   },
   navigationText: {
     fontSize: 16,
@@ -277,7 +281,6 @@ const styles = StyleSheet.create({
   },
   errorLoginText: {
     position: "absolute",
-
     top: 50,
     fontSize: 12,
     fontFamily: "Roboto",
