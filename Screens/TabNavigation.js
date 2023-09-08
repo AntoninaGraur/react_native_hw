@@ -14,15 +14,22 @@ const TabNavigation = ({navigation}) => {
   return (
     <>
       <View style={styles.footerMap}>
-        <TouchableHighlight onPress={() => navigation.navigate("PostsScreen")}>
+        <TouchableHighlight
+          underlayColor="transparent"
+          onPress={() => navigation.navigate("PostsScreen")}
+        >
           <SvgFeather />
         </TouchableHighlight>
         <TouchableHighlight
+          underlayColor="transparent"
           onPress={() => navigation.navigate("MakePostsScreen")}
         >
           <SvgAddPost />
         </TouchableHighlight>
-        <TouchableHighlight onPress={() => navigation.navigate( "ProfileScreen")}>
+        <TouchableHighlight
+          underlayColor="transparent"
+          onPress={() => navigation.navigate("ProfileScreen")}
+        >
           <SvgIconAvatar />
         </TouchableHighlight>
       </View>
