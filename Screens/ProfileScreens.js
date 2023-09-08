@@ -11,10 +11,19 @@ import {
 
 const ProfileScreen = () => {
     return (
-        <View>
-            <Text>Profile</Text>
-        </View>
-    )
+      <View style={styles.headerProfile}>
+        <Text>Profile</Text>
+      </View>
+    );
 };
 
 export default ProfileScreen;
+
+
+const styles = StyleSheet.create({
+  headerProfile: {
+    marginTop:65,
+    paddingLeft: 18,
+    
+  },
+});

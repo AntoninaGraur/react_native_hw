@@ -10,10 +10,17 @@ import {
 
 const MakePostScreen = () => {
   return (
-    <View>
+    <View style={styles.headerMake}>
       <Text>CreateScreen</Text>
     </View>
   );
 };
 
 export default MakePostScreen;
+
+const styles = StyleSheet.create({
+  headerMake: {
+    marginTop: 65,
+    paddingLeft: 18,
+  },
+});
