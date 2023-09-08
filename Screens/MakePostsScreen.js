@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -8,53 +8,130 @@ import {
   TouchableHighlight,
   TextInput,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
+import * as Location from "expo-location";
+import { useNavigation } from "@react-navigation/native";
+
+import { Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+
 import SvgTrash from "./components/trashSvg";
 import FotoSvg from "./components/fotoSvg";
 import ArrowBackSvg from "./components/arrowBack";
 import SvgPhotoaparat from "./components/photoaparatSvg";
 import SvgLocation from "./components/locationSvg";
 
-const MakePostScreen = () => {
+
+
+const MakePostScreen = ({  }) => {
+const [photoTitle, setPhotoTitle] = useState(""); 
+const [location, setLocation] = useState(""); 
+  const { navigate } = useNavigation();
+  
+   const handlePhotoTitleChange = (text) => {
+     setPhotoTitle(text);
+   };
+
+   const handleLocationChange = (text) => {
+     setLocation(text);
+  };
+  
+ const askForLocationPermission = async () => {
+   try {
+     const { status } = await Location.requestForegroundPermissionsAsync();
+
+     if (status === "granted") {
+       const location = await Location.getCurrentPositionAsync({});
+       const { latitude, longitude } = location.coords;
+
+      
+       console.log("Latitude:", latitude);
+       console.log("Longitude:", longitude);
+     } else {
+       
+       console.log("Location permission not granted");
+     }
+   } catch (error) {
+     console.error("Error while requesting location permission:", error);
+   }
+ };
+
+   const handlePublish = () => {
+     
+     askForLocationPermission();
+
+     setPhotoTitle("");
+     setLocation("");
+
+      navigate("PostsScreen", { location }); 
+   };
+
+  
+  
   return (
     <>
-      <ScrollView style={styles.mainBox}>
-        <View style={styles.headerMake}>
-          <TouchableHighlight style={styles.arrowBackSvg}>
-            <ArrowBackSvg />
-          </TouchableHighlight>
-          <Text style={styles.mainCreateTitle}>Create Post</Text>
-        </View>
-        <View style={styles.downloadContainer}>
-          <TouchableHighlight style={styles.circleSvg}>
-            <FotoSvg />
-          </TouchableHighlight>
-          <TouchableHighlight style={styles.photoaparatSvg}>
-            <SvgPhotoaparat />
-          </TouchableHighlight>
-        </View>
-        <View>
-          <Text style={styles.dowloadText}>Dowload Photo</Text>
-        </View>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : null}
-        >
-          <View>
-            <TextInput placeholder="What is that?" style={styles.input} />
-         
-          <TouchableHighlight style={styles.locationSvg}>
-            <SvgLocation />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView style={styles.mainBox}>
+          <View style={styles.headerMake}>
+            <TouchableHighlight style={styles.arrowBackSvg}>
+              <ArrowBackSvg />
+            </TouchableHighlight>
+            <Text style={styles.mainCreateTitle}>Create Post</Text>
+          </View>
+          <View style={styles.downloadContainer}>
+            <TouchableHighlight style={styles.circleSvg}>
+              <FotoSvg />
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.photoaparatSvg}>
+              <SvgPhotoaparat />
             </TouchableHighlight>
           </View>
           <View>
-            <TextInput placeholder="Location?" style={styles.input} />
+            <Text style={styles.dowloadText}>Dowload Photo</Text>
           </View>
-        </KeyboardAvoidingView>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : null}
+          >
+            <View>
+              <TextInput
+                placeholder="What is that?"
+                style={styles.input}
+                value={photoTitle}
+                onChangeText={handlePhotoTitleChange}
+              />
 
-        <View style={styles.trashSvg} pointerEvents="auto">
-          <SvgTrash />
-        </View>
-      </ScrollView>
+              <TouchableHighlight
+                style={styles.locationSvg}
+                onPress={() => navigation.navigate("MapScreen")}
+                value={location}
+                onChangeText={handleLocationChange}
+              >
+                <SvgLocation />
+              </TouchableHighlight>
+            </View>
+            <View>
+              <TextInput placeholder="Location?" style={styles.input} />
+            </View>
+            <TouchableHighlight
+              style={styles.buttonContainer}
+             onPress={handlePublish}
+              underlayColor="transparent"
+            >
+              <Text style={styles.buttonTitle} >
+                Publish
+              </Text>
+            </TouchableHighlight>
+          </KeyboardAvoidingView>
+
+          <View style={styles.trashSvgContainer}>
+            <TouchableHighlight style={styles.trashSvg}>
+              <SvgTrash />
+            </TouchableHighlight>
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
     </>
   );
 };
@@ -132,7 +209,7 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     fontWeight: "400",
     paddingLeft: 16,
-    paddingBottom:48,
+    paddingBottom: 48,
   },
   input: {
     width: 343,
@@ -153,15 +230,33 @@ const styles = StyleSheet.create({
     padding: 0,
     marginTop: 0,
   },
+  buttonContainer: {
+    borderWidth: 1,
+    borderColor: "transparent",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FF6C00",
+    borderRadius: 100,
+    width: 343,
+    marginBottom: 16,
+  },
+  buttonTitle: {
+    fontSize: 16,
+    paddingTop: 16,
+    paddingBottom: 16,
+    fontWeight: "bold",
+    color: "white",
+  },
+  trashSvgContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop:20,
+  },
   trashSvg: {
     width: 70,
     height: 40,
     backgroundColor: "#F6F6F6",
     borderWidth: 0,
-    borderWidthTopColor: "transparent",
-    borderWidthBottomColor: "transparent",
-    borderWidthLeftColor: "transparent",
-    borderWidthRightColor: "transparent",
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",

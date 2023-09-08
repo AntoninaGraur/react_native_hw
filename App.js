@@ -11,6 +11,8 @@ import TabNavigation from "./Screens/TabNavigation";
 import MakePostScreen from "./Screens/MakePostsScreen";
 import ProfileScreen from "./Screens/ProfileScreens";
 import CommentsCreeen from "./Screens/CommentsScreen";
+import MapScreen from "./Screens/MapScreen";
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -55,6 +57,11 @@ export default function App() {
         <Stack.Screen
           name="CommentsScreen"
           component={CommentsCreeen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MapScreen"
+          component={MapScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
