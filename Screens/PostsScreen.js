@@ -8,11 +8,12 @@ import {
   TouchableHighlight,
 } from "react-native";
 
-import MapScreen from "./MapScreen";
+
 
 import SvgLogout from "./components/svgLogout";
+import TabNavigation from "./TabNavigation";
 
-const PostsScreen = ({ email, navigation}) => {
+const PostsScreen = ({ email, navigation }) => {
   return (
     <>
       <ScrollView style={styles.mainBox}>
@@ -44,7 +45,7 @@ const PostsScreen = ({ email, navigation}) => {
           <Text style={styles.imageSubscription}>Forest</Text>
         </View>
       </ScrollView>
-      <MapScreen navigation={navigation}  />
+      <TabNavigation navigation={navigation} />
     </>
   );
 };

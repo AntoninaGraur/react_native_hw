@@ -7,13 +7,10 @@ import SvgAddPost from "./components/addPostSvg";
 import SvgIconAvatar from "./components/iconAvatar";
 
 
-import PostsScreen from "./PostsScreen";
-import MakePostScreen from "./MakePostsScreen";
-import ProfileScreen from "./ProfileScreens";
-import { useNavigation } from "@react-navigation/native";
 
-const MapScreen = ({navigation}) => {
-    // const navigation = useNavigation();
+
+const TabNavigation = ({navigation}) => {
+   
   return (
     <>
       <View style={styles.footerMap}>
@@ -33,7 +30,7 @@ const MapScreen = ({navigation}) => {
   );
 };
 
-export default MapScreen;
+export default TabNavigation;
 
 const styles = StyleSheet.create({
   footerMap: {
