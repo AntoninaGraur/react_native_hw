@@ -12,6 +12,9 @@ import "react-native-gesture-handler";
 import LoginScreen from "./Screens/LoginScreen";
 import PostsScreen from "./Screens/PostsScreen";
 import Home from "./Screens/Home";
+import MapScreen from "./Screens/MapScreen";
+import MakePostScreen from "./Screens/MakePostsScreen";
+import ProfileScreen from "./Screens/ProfileScreens";
 
 const Stack = createStackNavigator();
 
@@ -33,28 +36,26 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{
-            title: "Home screen",
-            headerStyle: {
-              backgroundColor: "#f4511e",
-            },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-              fontWeight: "bold",
-              fontSize: 20,
-            },
-            headerRight: () => (
-              <Button
-                onPress={() => alert("This is a button!")}
-                title="Press me"
-                color="#fff"
-              />
-            ),
-          }}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MapScreen"
+          component={MapScreen}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PostsScreen"
           component={PostsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MakePostsScreen"
+          component={MakePostScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

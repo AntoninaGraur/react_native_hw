@@ -10,9 +10,9 @@ import {
 
 import MapScreen from "./MapScreen";
 
-import SvgComponent from "./components/svgLogout";
+import SvgLogout from "./components/svgLogout";
 
-const PostsScreen = ({ email, navigation }) => {
+const PostsScreen = ({ email, navigation}) => {
   return (
     <>
       <ScrollView style={styles.mainBox}>
@@ -21,7 +21,7 @@ const PostsScreen = ({ email, navigation }) => {
           <TouchableHighlight
             onPress={() => navigation.navigate("LoginScreen")}
           >
-            <SvgComponent style={styles.logoutSvg} />
+            <SvgLogout style={styles.logoutSvg} />
           </TouchableHighlight>
         </View>
         <View style={styles.imageContainer}>
@@ -44,7 +44,7 @@ const PostsScreen = ({ email, navigation }) => {
           <Text style={styles.imageSubscription}>Forest</Text>
         </View>
       </ScrollView>
-      <MapScreen navigation={navigation}/>
+      <MapScreen navigation={navigation}  />
     </>
   );
 };

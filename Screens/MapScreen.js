@@ -1,56 +1,34 @@
 import React from "react";
-import { ScrollView, StyleSheet, View, TouchableHighlight } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
+import {  StyleSheet, View, TouchableHighlight } from "react-native";
+
 
 import SvgFeather from "./components/featherSvg";
 import SvgAddPost from "./components/addPostSvg";
 import SvgIconAvatar from "./components/iconAvatar";
 
+
 import PostsScreen from "./PostsScreen";
-import ProfileScreen from "./ProfileScreens";
 import MakePostScreen from "./MakePostsScreen";
+import ProfileScreen from "./ProfileScreens";
+import { useNavigation } from "@react-navigation/native";
 
-const Tab = createBottomTabNavigator();
-
-
-const MapScreen = ({ navigation }) => {
+const MapScreen = ({navigation}) => {
+    // const navigation = useNavigation();
   return (
     <>
-    
-        <Tab.Navigator>
-          <Tab.Screen
-            name="Posts"
-            component={PostsScreen}
-            options={{
-             
-              tabBarIcon: () => (
-                <SvgFeather  />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="MakePost"
-            component={MakePostScreen}
-            options={{
-             
-              tabBarIcon: () => (
-                <SvgAddPost  />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Profile"
-            component={ProfileScreen}
-            options={{
-              
-              tabBarIcon: () => (
-                <SvgIconAvatar />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-     
+      <View style={styles.footerMap}>
+        <TouchableHighlight onPress={() => navigation.navigate("PostsScreen")}>
+          <SvgFeather />
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => navigation.navigate("MakePostsScreen")}
+        >
+          <SvgAddPost />
+        </TouchableHighlight>
+        <TouchableHighlight onPress={() => navigation.navigate( "ProfileScreen")}>
+          <SvgIconAvatar />
+        </TouchableHighlight>
+      </View>
     </>
   );
 };

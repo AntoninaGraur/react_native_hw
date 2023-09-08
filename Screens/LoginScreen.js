@@ -112,6 +112,7 @@ const LoginScreen = ({ navigation }) => {
         password: "",
       }); 
       navigation.navigate("Home", {
+        
         email: formData.email,
       });
     }
