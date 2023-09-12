@@ -10,7 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 
-const MapScreen = ({navigation}) => {
+const MapScreen = () => {
   return (
     <View style={styles.container}>
       <MapView

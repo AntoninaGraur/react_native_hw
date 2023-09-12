@@ -12,11 +12,16 @@ import MakePostScreen from "./Screens/MakePostsScreen";
 import ProfileScreen from "./Screens/ProfileScreens";
 import CommentsCreeen from "./Screens/CommentsScreen";
 import MapScreen from "./Screens/MapScreen";
+import CameraScreen from "./Screens/CameraScreen";
+
+import { Provider } from "react-redux";
+import store from "./redux/store/store";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Registration">
         <Stack.Screen
@@ -52,7 +57,7 @@ export default function App() {
         <Stack.Screen
           name="MakePostsScreen"
           component={MakePostScreen}
-          options={{ headerShown: false }}
+          options={{ title: " " }}
         />
         <Stack.Screen
           name="CommentsScreen"
@@ -64,7 +69,13 @@ export default function App() {
           component={MapScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="CameraScreen"
+          component={CameraScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
-    </NavigationContainer>
+      </NavigationContainer>
+    </Provider>
   );
 }

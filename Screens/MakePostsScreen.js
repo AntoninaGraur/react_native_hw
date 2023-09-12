@@ -1,90 +1,103 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
   View,
-  Image,
   Text,
   TouchableHighlight,
   TextInput,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Image,
 } from "react-native";
 import * as Location from "expo-location";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute} from "@react-navigation/native";
 
-import { Camera } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
 
 import SvgTrash from "./components/trashSvg";
-import FotoSvg from "./components/fotoSvg";
 import ArrowBackSvg from "./components/arrowBack";
-import SvgPhotoaparat from "./components/photoaparatSvg";
 import SvgLocation from "./components/locationSvg";
+import FotoSvg from "./components/fotoSvg";
+import SvgPhotoaparat from "./components/photoaparatSvg";
 
 
-
-const MakePostScreen = ({  }) => {
-const [photoTitle, setPhotoTitle] = useState(""); 
-const [location, setLocation] = useState(""); 
+const MakePostScreen = () => {
+  const [photoTitle, setPhotoTitle] = useState("");
+  const [location, setLocation] = useState("");
+const [image, setImage] = useState(null);
   const { navigate } = useNavigation();
   
-   const handlePhotoTitleChange = (text) => {
-     setPhotoTitle(text);
-   };
 
-   const handleLocationChange = (text) => {
-     setLocation(text);
+  const handlePhotoTitleChange = (text) => {
+    setPhotoTitle(text);
   };
-  
- const askForLocationPermission = async () => {
-   try {
-     const { status } = await Location.requestForegroundPermissionsAsync();
 
-     if (status === "granted") {
-       const location = await Location.getCurrentPositionAsync({});
-       const { latitude, longitude } = location.coords;
+  const askForLocationPermission = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
 
-      
-       console.log("Latitude:", latitude);
-       console.log("Longitude:", longitude);
-     } else {
-       
-       console.log("Location permission not granted");
-     }
-   } catch (error) {
-     console.error("Error while requesting location permission:", error);
-   }
- };
+      if (status === "granted") {
+        const locationData = await Location.getCurrentPositionAsync({});
+        const { latitude, longitude } = locationData.coords;
 
-   const handlePublish = () => {
+        console.log("Latitude:", latitude);
+        console.log("Longitude:", longitude);
+
+        setLocation({ latitude, longitude });
+      } else {
+        console.log("Location permission not granted");
+      }
+    } catch (error) {
+      console.error("Error while requesting location permission:", error);
+    }
+  };
+
+
+  const handlePublish = async () => {
+    askForLocationPermission();
+
+    const post = {
+      title: photoTitle,
+      location,
      
-     askForLocationPermission();
+    };
 
-     setPhotoTitle("");
-     setLocation("");
+    console.log("Created Post:", post);
 
-      navigate("PostsScreen", { location }); 
-   };
+    setPhotoTitle("");
+    setLocation(null);
+    
+    navigate("PostsScreen", { post });
+  };
 
-  
-  
   return (
     <>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView style={styles.mainBox}>
           <View style={styles.headerMake}>
-            <TouchableHighlight style={styles.arrowBackSvg}>
+            <TouchableHighlight
+              style={styles.arrowBackSvg}
+              underlayColor="transparent"
+            >
               <ArrowBackSvg />
             </TouchableHighlight>
             <Text style={styles.mainCreateTitle}>Create Post</Text>
           </View>
+
           <View style={styles.downloadContainer}>
-            <TouchableHighlight style={styles.circleSvg}>
+            <TouchableHighlight
+              style={styles.circleSvg}
+              onPress={() => navigate("CameraScreen")}
+              underlayColor="transparent"
+            >
               <FotoSvg />
             </TouchableHighlight>
-            <TouchableHighlight style={styles.photoaparatSvg}>
+            <TouchableHighlight
+              style={styles.photoaparatSvg}
+              onPress={() => navigate("CameraScreen")}
+              underlayColor="transparent"
+            >
               <SvgPhotoaparat />
             </TouchableHighlight>
           </View>
@@ -104,24 +117,26 @@ const [location, setLocation] = useState("");
 
               <TouchableHighlight
                 style={styles.locationSvg}
-                onPress={() => navigation.navigate("MapScreen")}
-                value={location}
-                onChangeText={handleLocationChange}
+                onPress={() => navigate("MapScreen")}
+                underlayColor="transparent"
               >
                 <SvgLocation />
               </TouchableHighlight>
             </View>
+
             <View>
-              <TextInput placeholder="Location?" style={styles.input} />
+              <TextInput
+                placeholder="Location?"
+                style={styles.input}
+                editable={false}
+              />
             </View>
             <TouchableHighlight
               style={styles.buttonContainer}
-             onPress={handlePublish}
+              onPress={handlePublish}
               underlayColor="transparent"
             >
-              <Text style={styles.buttonTitle} >
-                Publish
-              </Text>
+              <Text style={styles.buttonTitle}>Publish</Text>
             </TouchableHighlight>
           </KeyboardAvoidingView>
 
@@ -174,6 +189,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingBottom: 25,
   },
+  cameraPostContainer: {
+    backgroundColor: "white",
+    paddingLeft: 18,
+    paddingRight: 16,
+    marginBottom: 8,
+  },
   downloadContainer: {
     flex: 1,
     flexDirection: "row",
@@ -202,6 +223,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     padding: 0,
     marginTop: 0,
+  },
+  photoPreviewContainer: {
+    position: "relative",
+    width: 330,
+    height: 140,
   },
   dowloadText: {
     color: "#BDBDBD",
@@ -250,7 +276,7 @@ const styles = StyleSheet.create({
   trashSvgContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop:20,
+    marginTop: 20,
   },
   trashSvg: {
     width: 70,
