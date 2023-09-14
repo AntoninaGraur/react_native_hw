@@ -13,7 +13,7 @@ import { useFonts } from "expo-font";
 import { Feather, FontAwesome, EvilIcons } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import * as Location from "expo-location";
+
 
 export default function CreatePostsScreen({ navigation }) {
   const [fontsLoaded] = useFonts({
@@ -21,14 +21,15 @@ export default function CreatePostsScreen({ navigation }) {
   });
 
   const [title, setTitle] = useState("");
- 
+  const[locationText, setLocationText] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [capturedImage, setCapturedImage] = useState(null);
-const [location, setLocation] = useState({});
-  const [errorMsg, setErrorMsg] = useState(null);
+
+
+
   
 
   useEffect(() => {
@@ -47,26 +48,17 @@ const [location, setLocation] = useState({});
     return <Text>No access to camera</Text>;
   }
 
+
+
+
   const handleInputChange = () => {
-    if (title && location) {
+    if (title && locationText) {
       setIsButtonDisabled(false);
     } else {
       setIsButtonDisabled(true);
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status == "granted") {
-        console.log("Permission granted");
-      } else {
-        console.log("Permission denied");
-      }
-       const location = await Location.getCurrentPositionAsync();
-       console.log(location);
-    })()
-   }, []);
 
 
   const activeButtonStyle = {
@@ -166,7 +158,7 @@ const [location, setLocation] = useState({});
             </View>
 
             <View style={s.inputContainer}>
-              <TouchableOpacity
+               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("MapScreen");
                 }}
@@ -177,9 +169,10 @@ const [location, setLocation] = useState({});
                 style={s.uploadInput}
                 placeholder="Where it is?"
                 onChangeText={(text) => {
-                  setLocation(text);
-                  handleInputChange();
+                  setLocationText(text); 
+                  handleInputChange()
                 }}
+                  
               ></TextInput>
             </View>
 
@@ -188,7 +181,10 @@ const [location, setLocation] = useState({});
               disabled={isButtonDisabled}
               onPress={() => {
                 if (!isButtonDisabled) {
-                  navigation.navigate("PostsScreen");
+                  navigation.navigate("PostsScreen", {
+                    title: title,
+                    location: locationText, 
+                  });
                 }
               }}
             >
