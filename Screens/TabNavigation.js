@@ -22,7 +22,7 @@ const TabNavigation = ({navigation}) => {
         </TouchableHighlight>
         <TouchableHighlight
           underlayColor="transparent"
-          onPress={() => navigation.navigate("MakePostsScreen")}
+          onPress={() => navigation.navigate("CreatePostsScreen")}
         >
           <SvgAddPost />
         </TouchableHighlight>
