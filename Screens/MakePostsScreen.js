@@ -14,23 +14,18 @@ import { Feather, FontAwesome, EvilIcons } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 
-
 export default function CreatePostsScreen({ navigation }) {
   const [fontsLoaded] = useFonts({
     "Roboto-Bold": require("../assets/fonts/Roboto/Roboto-Black.ttf"),
   });
 
   const [title, setTitle] = useState("");
-  const[locationText, setLocationText] = useState("");
+  const [locationText, setLocationText] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [capturedImage, setCapturedImage] = useState(null);
-
-
-
-  
 
   useEffect(() => {
     (async () => {
@@ -48,9 +43,6 @@ export default function CreatePostsScreen({ navigation }) {
     return <Text>No access to camera</Text>;
   }
 
-
-
-
   const handleInputChange = () => {
     if (title && locationText) {
       setIsButtonDisabled(false);
@@ -58,8 +50,6 @@ export default function CreatePostsScreen({ navigation }) {
       setIsButtonDisabled(true);
     }
   };
-
-
 
   const activeButtonStyle = {
     width: 343,
@@ -158,7 +148,7 @@ export default function CreatePostsScreen({ navigation }) {
             </View>
 
             <View style={s.inputContainer}>
-               <TouchableOpacity
+              <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("MapScreen");
                 }}
@@ -169,10 +159,9 @@ export default function CreatePostsScreen({ navigation }) {
                 style={s.uploadInput}
                 placeholder="Where it is?"
                 onChangeText={(text) => {
-                  setLocationText(text); 
-                  handleInputChange()
+                  setLocationText(text);
+                  handleInputChange();
                 }}
-                  
               ></TextInput>
             </View>
 
@@ -183,7 +172,7 @@ export default function CreatePostsScreen({ navigation }) {
                 if (!isButtonDisabled) {
                   navigation.navigate("PostsScreen", {
                     title: title,
-                    location: locationText, 
+                    location: locationText,
                   });
                 }
               }}
@@ -198,17 +187,16 @@ export default function CreatePostsScreen({ navigation }) {
                 Publish
               </Text>
             </TouchableOpacity>
+             <TouchableOpacity
+          style={s.deleteBtn}
+          onPress={() => navigation.navigate("PostsScreen")}
+        >
+          <EvilIcons name="trash" size={30} color="gray" />
+        </TouchableOpacity>
           </View>
         </View>
 
-        <View style={s.customTabBar}>
-          <TouchableOpacity
-            style={s.deleteBtn}
-            onPress={() => navigation.navigate("PostsScreen")}
-          >
-            <EvilIcons name="trash" size={30} color="gray" />
-          </TouchableOpacity>
-        </View>
+       
       </View>
     </TouchableWithoutFeedback>
   );
@@ -260,6 +248,8 @@ const s = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 40,
+    marginTop: 20,
+    marginLeft:150,
   },
   mainContent: {
     flex: 1,
