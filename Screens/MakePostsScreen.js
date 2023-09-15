@@ -249,7 +249,7 @@ const s = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 40,
     marginTop: 20,
-    marginLeft:150,
+    marginLeft:135,
   },
   mainContent: {
     flex: 1,

@@ -9,22 +9,10 @@ import {
 } from "react-native";
 
 
-
-import SvgLogout from "./components/svgLogout";
-import TabNavigation from "./TabNavigation";
-
-const PostsScreen = ({ email, navigation }) => {
+const PostsScreen = () => {
   return (
     <>
       <ScrollView style={styles.mainBox}>
-        <View style={styles.headerPosts}>
-          <Text style={styles.mainTitle}>Posts</Text>
-          <TouchableHighlight
-            onPress={() => navigation.navigate("LoginScreen")}
-          >
-            <SvgLogout style={styles.logoutSvg} />
-          </TouchableHighlight>
-        </View>
         <View style={styles.imageContainer}>
           <View>
             <Image
@@ -34,7 +22,7 @@ const PostsScreen = ({ email, navigation }) => {
           </View>
           <View style={styles.userNameContainer}>
             <Text style={styles.loginName}>Antonina Graur</Text>
-            <Text style={styles.emailText}>{email}</Text>
+            <Text style={styles.emailText}>tonichka930@gmail.com</Text>
           </View>
         </View>
         <View>
@@ -45,7 +33,6 @@ const PostsScreen = ({ email, navigation }) => {
           <Text style={styles.imageSubscription}>Forest</Text>
         </View>
       </ScrollView>
-      <TabNavigation navigation={navigation} />
     </>
   );
 };

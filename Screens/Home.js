@@ -1,21 +1,56 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
-import PostsScreen from "./PostsScreen"
+import {  StyleSheet } from "react-native";
 
-import SvgFeather from "./components/featherSvg";
-import SvgAddPost from "./components/addPostSvg";
-import SvgIconAvatar from "./components/iconAvatar";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import ProfileScreen from "./ProfileScreens";
+import CreatePostsScreen from "./MakePostsScreen";
+import PostsScreen from "./PostsScreen";
 
+import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+const Tab = createBottomTabNavigator();
 
-const Home = ({ route, navigation, screen }) => {
-  const { email,  } = route.params;
-
+const Home = () => {
+ 
   return (
-    <View style={styles.container}>
-      <PostsScreen email={email} navigation={navigation} screen={screen} />
-    </View>
-    
+    <Tab.Navigator
+      initialRouteName="PostsScreen"
+      screenOptions={{
+        title: "Posts",
+      }}
+    >
+      <Tab.Screen
+        name="PostsScreen"
+        component={PostsScreen }
+        options={{
+          title: "Posts",
+          tabBarIcon: ({ size, color }) => (
+            <AntDesign name="appstore-o" size={24} color="black" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="CreatePostsScreen"
+        component={CreatePostsScreen}
+        options={{
+          title: "Create",
+          tabBarIcon: ({ size, color }) => (
+            <AntDesign name="plus" size={26} color="black" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome5 name="user" size={24} color="black" />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 };
 export default Home;
@@ -27,5 +62,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-

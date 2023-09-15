@@ -5,18 +5,17 @@ import RegistrationScreen from "./Screens/RegistrationScreen";
 import "react-native-gesture-handler";
 
 import LoginScreen from "./Screens/LoginScreen";
-import PostsScreen from "./Screens/PostsScreen";
-import Home from "./Screens/Home";
-import TabNavigation from "./Screens/TabNavigation";
 
-import ProfileScreen from "./Screens/ProfileScreens";
+import Home from "./Screens/Home";
+
+
 import CommentsCreeen from "./Screens/CommentsScreen";
 import MapScreen from "./Screens/MapScreen";
 
 
 import { Provider } from "react-redux";
 import store from "./redux/store/store";
-import CreatePostsScreen from "./Screens/MakePostsScreen";
+
 
 const Stack = createStackNavigator();
 
@@ -40,26 +39,10 @@ export default function App() {
           component={Home}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="TabNavigation"
-          component={TabNavigation}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PostsScreen"
-          component={PostsScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ProfileScreen"
-          component={ProfileScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="CreatePostsScreen"
-          component={CreatePostsScreen}
-          options={{ title: "Create Post " }}
-        />
+       
+       
+       
+     
         <Stack.Screen
           name="CommentsScreen"
           component={CommentsCreeen}
