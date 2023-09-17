@@ -14,14 +14,14 @@ import MapScreen from "./Screens/MapScreen";
 
 
 import { Provider } from "react-redux";
-import store from "./redux/store/store";
+import store from "./redux/store";
 
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    // <Provider store={store}>
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Registration">
         <Stack.Screen
@@ -56,6 +56,6 @@ export default function App() {
        
       </Stack.Navigator>
       </NavigationContainer>
-    // </Provider>
+     </Provider>
   );
 }
