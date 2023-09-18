@@ -16,6 +16,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import SvgRegistAvatar from './components/registAvatarSvg';
 import RegisterButton from "./components/Buttons";
+import { FIREBASE_AUTH } from "../FirebaseConfig";
+
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  onAuthStateChanged,
+} from "firebase/auth";
 
 const RegistrationScreen = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
@@ -23,12 +30,47 @@ const RegistrationScreen = ({ navigation }) => {
   });
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [marginTop, setMarginTop] = useState(235);
+  
+   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [login, setLogin] = useState("");
+  const [loading, setLoading] = useState(false);
+  const auth = FIREBASE_AUTH;
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  const [marginTop, setMarginTop] = useState(235);
+   const SignUp = async (email: string, password: string) => {
+    setLoading(true);
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(response.user, { displayName: login });
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          navigation.navigate("Home");
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      alert("Login failed" + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const onSubmit = () => {
+    SignUp(email, password);
+    console.log("register success");
+  };
+
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -50,68 +92,7 @@ const RegistrationScreen = ({ navigation }) => {
     };
   }, []);
 
-  const [formData, setFormData] = useState({
-    login: "",
-    email: "",
-    password: "",
-  });
-
-  const [formErrors, setFormErrors] = useState({});
-
-  const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-  const validateForm = () => {
-    const errors = {};
-
-    if (!formData.login) {
-      errors.login = "Login is required";
-    }
-
-    if (!formData.email) {
-      errors.email = "Email is required";
-    } else if (!isValidEmail(formData.email)) {
-      errors.email = "Invalid email address";
-    }
-
-    if (!formData.password) {
-      errors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      errors.password = "Password must be at least 6 characters long";
-    }
-
-    setFormErrors(errors);
-
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleRegistration = async () => {
-    const isFormValid = validateForm();
-
-    if (isFormValid) {
-   
-      try {
-        await AsyncStorage.setItem("userData", JSON.stringify(formData));
-        console.log("User data saved to AsyncStorage:", formData);
-      } catch (error) {
-        console.error("Error saving user data to AsyncStorage:", error);
-      }
-
-    
-      setFormData({
-        login: "",
-        email: "",
-        password: "",
-      });
-
-      
-      navigation.navigate("Home", {
-        email: formData.email,
-      });
-    }
-  };
-
+ 
 
 
   return (
@@ -123,7 +104,7 @@ const RegistrationScreen = ({ navigation }) => {
         />
         <KeyboardAvoidingView
           style={styles.container}
-          behavior={Platform.OS === "ios" ? "padding" : null}
+         
         >
           <View style={[styles.innerContainer, { marginTop }]}>
             <TouchableHighlight style={styles.avatarImage}>
@@ -134,34 +115,30 @@ const RegistrationScreen = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Login"
-                onChangeText={(text) =>
-                  setFormData({ ...formData, login: text })
-                }
+                onChangeText={(text) => {
+                    setLogin(text);
+                  }}
               />
-              {formErrors.login && (
-                <Text style={styles.errorLoginText}>{formErrors.login}</Text>
-              )}
+             
             </View>
             <View style={styles.emailContainer}>
               <TextInput
                 style={styles.input}
                 placeholder="Email address"
-                onChangeText={(text) =>
-                  setFormData({ ...formData, email: text })
-                }
+                  onChangeText={(text) => {
+                    setEmail(text);
+                  }}
               />
-              {formErrors.email && (
-                <Text style={styles.errorEmailText}>{formErrors.email}</Text>
-              )}
+            
             </View>
             <View style={styles.passwordContainer}>
               <TextInput
                 style={styles.passwordInput}
                 placeholder="Password"
                 secureTextEntry={!isPasswordVisible}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, password: text })
-                }
+                  onChangeText={(text) => {
+                      setPassword(text);
+                    }}
               />
 
               <Text
@@ -170,11 +147,7 @@ const RegistrationScreen = ({ navigation }) => {
               >
                 {isPasswordVisible ? "Hide" : "Show"}
               </Text>
-              {formErrors.password && (
-                <Text style={styles.errorPasswordText}>
-                  {formErrors.password}
-                </Text>
-              )}
+             
             </View>
             <Text
               style={styles.navigationText}
@@ -182,7 +155,7 @@ const RegistrationScreen = ({ navigation }) => {
             >
               Already have account? Login
             </Text>
-            <RegisterButton onPress={handleRegistration} />
+            <RegisterButton onPress={onSubmit} />
           </View>
         </KeyboardAvoidingView>
       </View>

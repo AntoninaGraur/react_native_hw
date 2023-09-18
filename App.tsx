@@ -15,21 +15,23 @@ import { FIREBASE_AUTH } from "./FirebaseConfig";
 import { User, onAuthStateChanged } from "firebase/auth";
 import store from "./redux/store";
 import { useEffect, useState } from "react";
+import React from "react";
+import { Text } from "react-native";
 
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [user, setUser] = useState(null);
+   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      console.log("user:", user);
+      console.log("user", user);
       setUser(user);
     });
   }, []);
 
   return (
-    <Provider store={store}>
+    <Provider store={store.store}>
       <PersistGate
         loading={<Text>Loading...</Text>}
         persistor={store.persistor}
