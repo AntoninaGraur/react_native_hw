@@ -86,12 +86,20 @@ const RegistrationScreen = ({ navigation }) => {
 
     return Object.keys(errors).length === 0;
   };
-
-  const handleRegistration = () => {
+  const handleRegistration = async () => {
     const isFormValid = validateForm();
 
     if (isFormValid) {
-      console.log("Form Data:", formData);
+      try {
+     
+        await AsyncStorage.setItem("formData", JSON.stringify(formData));
+        console.log("Form Data saved to AsyncStorage:", formData);
+
+        
+         navigation.navigate("Home");
+      } catch (error) {
+        console.error("Error saving form data to AsyncStorage:", error);
+      }
     }
   };
 

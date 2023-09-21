@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -7,30 +7,48 @@ import {
   Text,
   TouchableHighlight,
 } from "react-native";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const PostsScreen = () => {
+  const [userData, setUserData] = useState({
+    login: "",
+    email: "",
+    password:"",
+  })
+  
+  useEffect(() => {
+
+    const fetchUserData = async () => {
+      try {
+        const savedData = await AsyncStorage.getItem("userData");
+        if (savedData) {
+          const parsedData = JSON.parse(savedData);
+          setUserData(parsedData);
+
+        }
+      } catch (error) {
+        console.log("Error fetching data", error);
+      }
+    };
+    fetchUserData();
+
+  }, []);
+
   return (
     <>
       <ScrollView style={styles.mainBox}>
         <View style={styles.imageContainer}>
           <View>
-            <Image
-              source={require("../assets/avatar.png")}
-              style={styles.avatarImage}
-            />
+            <Image source={require("../assets/avatar.png")} style={styles.avatarImage} />
           </View>
           <View style={styles.userNameContainer}>
-            <Text style={styles.loginName}>Antonina Graur</Text>
-            <Text style={styles.emailText}>tonichka930@gmail.com</Text>
+            <Text style={styles.loginName}> {userData.login} </Text>
+            <Text style={styles.emailText}> {userData.email} </Text>
           </View>
         </View>
         <View>
-          <Image
-            source={require("../assets/rocks.png")}
-            style={styles.postImage}
-          />
-          <Text style={styles.imageSubscription}>Forest</Text>
+          <Image source={require("../assets/rocks.png")} style={styles.postImage} />
+          <Text style={styles.imageSubscription}></Text>
         </View>
       </ScrollView>
     </>

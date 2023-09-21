@@ -15,6 +15,7 @@ import store from "./redux/store";
 import { useEffect, useState } from "react";
 import React from "react";
 import { Text } from "react-native";
+import MapScreen from "./Screens/MapScreen";
 
 const Stack = createStackNavigator();
 
@@ -28,26 +29,29 @@ export default function App() {
       >
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Registration">
-          
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={{ headerShown: false }}
+            />
+
+            <>
               <Stack.Screen
-                name="Home"
-                component={Home}
+                name="Registration"
+                component={RegistrationScreen}
                 options={{ headerShown: false }}
               />
-           
-              <>
-                <Stack.Screen
-                  name="Registration"
-                  component={RegistrationScreen}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="LoginScreen"
-                  component={LoginScreen}
-                  options={{ headerShown: false }}
-                />
-              </>
-          
+              <Stack.Screen
+                name="LoginScreen"
+                component={LoginScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="MapScreen"
+                component={MapScreen}
+                options={{ headerShown: false }}
+              />
+            </>
           </Stack.Navigator>
         </NavigationContainer>
       </PersistGate>

@@ -13,6 +13,7 @@ import { useFonts } from "expo-font";
 import { Feather, FontAwesome, EvilIcons } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function CreatePostsScreen({ navigation }) {
   const [fontsLoaded] = useFonts({
@@ -75,6 +76,21 @@ export default function CreatePostsScreen({ navigation }) {
     color: "#BDBDBD",
     fontSize: 16,
   };
+
+const saveDataToStorage = async (title, locationText, capturedImage) => {
+  try {
+    const data = {
+      title,
+      locationText,
+      capturedImage,
+    };
+
+    await AsyncStorage.setItem("postData", JSON.stringify(data));
+    console.log("Data saved to AsyncStorage:", data);
+  } catch (error) {
+    console.error("Error saving data to AsyncStorage:", error);
+  }
+};
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -170,6 +186,7 @@ export default function CreatePostsScreen({ navigation }) {
               disabled={isButtonDisabled}
               onPress={() => {
                 if (!isButtonDisabled) {
+                  saveDataToStorage(title, locationText, capturedImage);
                   navigation.navigate("PostsScreen", {
                     title: title,
                     location: locationText,
