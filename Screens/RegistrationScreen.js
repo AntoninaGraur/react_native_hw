@@ -15,6 +15,7 @@ import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import RegisterButton from "./components/Buttons";
+import { useSelector } from "react-redux";
 
 
 
@@ -50,6 +51,9 @@ const RegistrationScreen = ({ navigation }) => {
       keyboardDidHideListener.remove();
     };
   }, []);
+
+  const login = useSelector(state => state.login)
+  console.log("login", login);
 
   const [formData, setFormData] = useState({
     login: "",
