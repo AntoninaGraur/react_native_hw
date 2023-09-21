@@ -50,6 +50,7 @@ const LoginScreen = ({ navigation }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    login:"",
   });
   const [formErrors, setFormErrors] = useState({});
   const isValidEmail = (email) => {
@@ -86,6 +87,7 @@ const LoginScreen = ({ navigation }) => {
             setFormData({
               email: parsedUserData.email,
               password: parsedUserData.password,
+              login: parsedUserData.login,
             });
           }
         } catch (error) {
@@ -110,9 +112,10 @@ const LoginScreen = ({ navigation }) => {
       setFormData({
         email: "",
         password: "",
+        login:"",
       }); 
       navigation.navigate("Home", {
-        
+        login:formData.login,
         email: formData.email,
       });
     }
