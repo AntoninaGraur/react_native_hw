@@ -23,10 +23,10 @@ export default function App() {
    
   return (
     <Provider store={store.store}>
-      <PersistGate
+      {/* <PersistGate
         loading={<Text>Loading...</Text>}
         persistor={store.persistor}
-      >
+      > */}
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Registration">
             <Stack.Screen
@@ -54,7 +54,7 @@ export default function App() {
             </>
           </Stack.Navigator>
         </NavigationContainer>
-      </PersistGate>
+      {/* </PersistGate> */}
     </Provider>
   );
 }
